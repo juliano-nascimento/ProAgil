@@ -61,6 +61,7 @@ namespace ProAgil.API.Controllers
         [HttpPost]
         public void Post([FromBody] string value)
         {
+            var teste =  new Evento();
         }
 
         // PUT api/values/5
