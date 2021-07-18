@@ -10,4 +10,9 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ProAgil.Domain\ProAgil.Domain.csproj" />
+    <ProjectReference Include="..\ProAgil.Repository\ProAgil.Repository.csproj" />
+  </ItemGroup>
+
 </Project>
