@@ -60,7 +60,7 @@ namespace ProAgil.Repository
             }
                 //não bloqueando de forma especifica diretamente no método
             query = query.AsNoTracking()
-                         .OrderByDescending(c => c.DataEvento);
+                         .OrderBy(c => c.Id);
 
             return await query.ToArrayAsync();
         }
