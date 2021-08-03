@@ -1,11 +1,12 @@
 import { Evento } from './../_models/Evento';
 import { EventoService } from './../_services/evento.service';
-import { Component, OnInit, TemplateRef } from '@angular/core';
-import { BsModalService } from 'ngx-bootstrap/modal';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { ptBrLocale } from 'ngx-bootstrap/locale';
+import { ToastrService } from 'ngx-toastr';
+
 defineLocale('pt-br', ptBrLocale);
 
 @Component({
@@ -15,6 +16,7 @@ defineLocale('pt-br', ptBrLocale);
 })
 
 export class EventosComponent implements OnInit {
+  titulo = 'Eventos';
   eventosFiltrados: Evento[] = [];
   eventos: Evento[] = [];
   evento: Evento | any;
@@ -38,9 +40,10 @@ set filtroLista(value: string) {
     : this.eventos;
   }
   constructor(
-    private eventoService: EventoService
-    , private fb: FormBuilder
-    , private localService: BsLocaleService
+    private eventoService: EventoService ,
+    private fb: FormBuilder ,
+    private localService: BsLocaleService,
+    private toastr: ToastrService
     ) {
       this.localService.use('pt-br');
     }
@@ -105,9 +108,11 @@ set filtroLista(value: string) {
                 console.log(novoEvento);
                 template.hide();
                 this.getEventos();
+                this.toastr.success('Inserido com sucesso!');
               },
               error => {
                 console.log(error);
+                this.toastr.error(`Erro ao inserir: ${error}`);
               }
             );
           }else{
@@ -117,9 +122,10 @@ set filtroLista(value: string) {
                 console.log(novoEvento);
                 template.hide();
                 this.getEventos();
+                this.toastr.success('Editado com sucesso!');
               },
               error => {
-                console.log(error);
+                this.toastr.error(`Erro ao editar: ${error}`);
               }
             );
           }
@@ -131,8 +137,9 @@ set filtroLista(value: string) {
           () => {
               template.hide();
               this.getEventos();
+              this.toastr.success('Deletado com sucesso');
             }, error => {
-              console.log(error);
+              this.toastr.error(`Erro deletar: ${error}`);
             }
         );
       }
@@ -142,10 +149,9 @@ set filtroLista(value: string) {
           (Eventos: Evento[]) => {
             this.eventos = Eventos;
             this.eventosFiltrados = this.eventos;
-            console.log(Eventos);
           },
           error => {
-            console.log(error);
+            this.toastr.error(`Erro ao tentar carregar eventos: ${error}`);
           });
         }
 
