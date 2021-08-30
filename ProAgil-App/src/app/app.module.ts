@@ -1,7 +1,7 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
@@ -21,6 +21,10 @@ import { TituloComponent } from './_shared/titulo/titulo.component';
 import { DateTimeFormatPipePipe } from './_helps/DateTimeFormatPipe.pipe';
 
 import { EventoService } from './_services/evento.service';
+import { UserComponent } from './user/user.component';
+import { RegistrationComponent } from './user/registration/registration.component';
+import { LoginComponent } from './user/login/login.component';
+import { AuthInterceptor } from './auth/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -31,7 +35,10 @@ import { EventoService } from './_services/evento.service';
       PalestrantesComponent,
       DashboardComponent,
       ContatosComponent,
-      TituloComponent
+      TituloComponent,
+      UserComponent,
+      RegistrationComponent,
+      LoginComponent
    ],
   imports: [
     BrowserModule,
@@ -44,10 +51,19 @@ import { EventoService } from './_services/evento.service';
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      preventDuplicates: true,
+      progressBar: true
+    })
   ],
   providers: [
-    EventoService
+    EventoService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
